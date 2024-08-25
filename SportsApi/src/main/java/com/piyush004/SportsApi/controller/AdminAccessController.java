@@ -18,7 +18,7 @@ public class AdminAccessController {
 	@Autowired
 	private UsersManagementService usersManagementService;
 
-	@GetMapping("/admin/get-all-users")
+	@GetMapping("/SuperAdmin/get-all-users")
 	public ResponseEntity<RequestResponse> getAllUsers() {
 		return ResponseEntity.ok(usersManagementService.getAllUsers());
 	}
@@ -28,7 +28,7 @@ public class AdminAccessController {
 		return ResponseEntity.ok(usersManagementService.deleteUser(userId));
 	}
 
-	@GetMapping("/adminuser/get-profile")
+	@GetMapping("/admin/get-profile")
 	public ResponseEntity<RequestResponse> getMyProfile() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
