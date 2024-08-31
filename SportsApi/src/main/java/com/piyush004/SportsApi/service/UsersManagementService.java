@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.piyush004.SportsApi.dto.RequestDto;
 import com.piyush004.SportsApi.dto.RequestResponse;
-import com.piyush004.SportsApi.entity.Users;
+import com.piyush004.SportsApi.entity.Role;
+import com.piyush004.SportsApi.entity.User;
 import com.piyush004.SportsApi.repository.UserRepo;
 
 @Service
@@ -31,14 +32,14 @@ public class UsersManagementService extends DefaultService {
 		RequestResponse resp = new RequestResponse();
 		try {
 
-			Users users = new Users();
+			User users = new User();
 			users.setEmail(request.getEmail());
 			users.setCity(request.getCity());
 			users.setRole(request.getRole());
 			users.setFirstName(request.getFirstName());
 			users.setLastName(request.getLastName());
 			users.setPassword(passwordEncoder.encode(request.getPassword()));
-			Users usersResult = usersRepo.save(users);
+			User usersResult = usersRepo.save(users);
 			if (usersResult.getId() > 0) {
 				resp.setOurUsers((usersResult));
 				resp.setMessage("User Saved Successfully");
@@ -82,7 +83,7 @@ public class UsersManagementService extends DefaultService {
 		RequestResponse response = new RequestResponse();
 		try {
 			String ourEmail = jwtUtils.extractUsername(refreshTokenReqiest.getToken());
-			Users users = usersRepo.findByEmail(ourEmail).orElseThrow();
+			User users = usersRepo.findByEmail(ourEmail).orElseThrow();
 			if (jwtUtils.isTokenValid(refreshTokenReqiest.getToken(), users)) {
 				var jwt = jwtUtils.generateToken(users);
 				response.setStatusCode(200);
@@ -105,7 +106,7 @@ public class UsersManagementService extends DefaultService {
 	public RequestResponse getAllUsers() {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			List<Users> result = usersRepo.findAll();
+			List<User> result = usersRepo.findAll();
 			if (!result.isEmpty()) {
 				reqRes.setOurUsersList(result);
 				reqRes.setStatusCode(200);
@@ -126,7 +127,7 @@ public class UsersManagementService extends DefaultService {
 	public RequestResponse getUsersById(Integer id) {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			Users usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
+			User usersById = usersRepo.findById(id).orElseThrow(() -> new RuntimeException("User Not found"));
 			reqRes.setOurUsers(usersById);
 			reqRes.setStatusCode(200);
 			reqRes.setMessage("Users with id '" + id + "' found successfully");
@@ -141,7 +142,7 @@ public class UsersManagementService extends DefaultService {
 	public RequestResponse deleteUser(Integer userId) {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			Optional<Users> userOptional = usersRepo.findById(userId);
+			Optional<User> userOptional = usersRepo.findById(userId);
 			if (userOptional.isPresent()) {
 				usersRepo.deleteById(userId);
 				reqRes.setStatusCode(200);
@@ -158,12 +159,12 @@ public class UsersManagementService extends DefaultService {
 		return reqRes;
 	}
 
-	public RequestResponse updateUser(Integer userId, Users updatedUser) {
+	public RequestResponse updateUser(Integer userId, User updatedUser) {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			Optional<Users> userOptional = usersRepo.findById(userId);
+			Optional<User> userOptional = usersRepo.findById(userId);
 			if (userOptional.isPresent()) {
-				Users existingUser = userOptional.get();
+				User existingUser = userOptional.get();
 				existingUser.setEmail(updatedUser.getEmail());
 				existingUser.setFirstName(updatedUser.getFirstName());
 				existingUser.setLastName(updatedUser.getLastName());
@@ -176,7 +177,7 @@ public class UsersManagementService extends DefaultService {
 					existingUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
 				}
 
-				Users savedUser = usersRepo.save(existingUser);
+				User savedUser = usersRepo.save(existingUser);
 				reqRes.setOurUsers(savedUser);
 				reqRes.setStatusCode(200);
 				reqRes.setMessage("User updated successfully");
@@ -195,7 +196,7 @@ public class UsersManagementService extends DefaultService {
 	public RequestResponse getMyInfo(String email) {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			Optional<Users> userOptional = usersRepo.findByEmail(email);
+			Optional<User> userOptional = usersRepo.findByEmail(email);
 			if (userOptional.isPresent()) {
 				reqRes.setOurUsers(userOptional.get());
 				reqRes.setStatusCode(200);

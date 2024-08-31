@@ -4,9 +4,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.piyush004.SportsApi.entity.Users;
+import com.piyush004.SportsApi.entity.User;
 
-public interface UserRepo extends JpaRepository<Users, Integer> {
+public interface UserRepo extends JpaRepository<User, Integer> {
 
-	Optional<Users> findByEmail(String email);
+	Optional<User> findByEmail(String email);
 }

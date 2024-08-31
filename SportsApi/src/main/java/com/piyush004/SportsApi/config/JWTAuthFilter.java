@@ -21,40 +21,40 @@ import com.piyush004.SportsApi.service.JWTUtils;
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
 
-	@Autowired
-	private JWTUtils jwtUtils;
+    @Autowired
+    private JWTUtils jwtUtils;
 
-	@Autowired
-	private UserDetailsService ourUserDetailsService;
+    @Autowired
+    private UserDetailsService ourUserDetailsService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
-		final String authHeader = request.getHeader("Authorization");
-		final String jwtToken;
-		final String userEmail;
-		if (authHeader == null || authHeader.isBlank()) {
-			filterChain.doFilter(request, response);
-			return;
-		}
+        final String authHeader = request.getHeader("Authorization");
+        final String jwtToken;
+        final String userEmail;
 
-		jwtToken = authHeader.substring(7);
-		userEmail = jwtUtils.extractUsername(jwtToken);
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-		if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			UserDetails userDetails = ourUserDetailsService.loadUserByUsername(userEmail);
+        jwtToken = authHeader.substring(7); // Remove "Bearer " prefix
+        userEmail = jwtUtils.extractUsername(jwtToken);
 
-			if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
-				SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-				UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null,
-						userDetails.getAuthorities());
-				token.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-				securityContext.setAuthentication(token);
-				SecurityContextHolder.setContext(securityContext);
-			}
-		}
-		filterChain.doFilter(request, response);
-	}
+        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = ourUserDetailsService.loadUserByUsername(userEmail);
 
+            if (jwtUtils.isTokenValid(jwtToken, userDetails)) {
+                SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null,
+                        userDetails.getAuthorities());
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                securityContext.setAuthentication(authToken);
+                SecurityContextHolder.setContext(securityContext);
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.piyush004.SportsApi.dto.RequestResponse;
-import com.piyush004.SportsApi.entity.Users;
+import com.piyush004.SportsApi.entity.User;
 import com.piyush004.SportsApi.service.UsersManagementService;
 
 @RestController
@@ -25,7 +25,7 @@ public class UserController {
 	}
 
 	@GetMapping("/user/update/{userId}")
-	public ResponseEntity<RequestResponse> updateUsers(@PathVariable Integer userId, @RequestBody Users request) {
+	public ResponseEntity<RequestResponse> updateUsers(@PathVariable Integer userId, @RequestBody User request) {
 		return ResponseEntity.ok(usersManagementService.updateUser(userId, request));
 	}
 	
