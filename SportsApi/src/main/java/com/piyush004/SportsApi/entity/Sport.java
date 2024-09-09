@@ -1,16 +1,13 @@
 package com.piyush004.SportsApi.entity;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "Sports")
+@Table(name = "sports")
 @Data
-public class Sport {
+public class Sport extends CommonFields {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,18 +19,12 @@ public class Sport {
 	@Column(columnDefinition = "TEXT")
 	private String description;
 
-	@Column(nullable = false)
-	private boolean isDisable = false;
+	@ManyToMany(mappedBy = "availableSports")
+    private List<Ground> grounds;
 
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createdAt = LocalDateTime.now();
-
-	@Column(nullable = false)
-	private LocalDateTime updatedAt = LocalDateTime.now();
-
-	@OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Enrollment> enrollments = new HashSet<>();
-
-	@OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<PlayerStats> playerStats = new HashSet<>();
+//	@OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<Enrollment> enrollments = new HashSet<>();
+//
+//	@OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private Set<PlayerStats> playerStats = new HashSet<>();
 }

@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.piyush004.SportsApi.dto.RequestDto;
 import com.piyush004.SportsApi.dto.RequestResponse;
@@ -28,28 +29,42 @@ public class UsersManagementService extends DefaultService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	@Transactional
 	public RequestResponse register(RequestResponse request) {
 		RequestResponse resp = new RequestResponse();
 		try {
 
-			User users = new User();
-			users.setEmail(request.getEmail());
-			users.setCity(request.getCity());
-			users.setRole(request.getRole());
-			users.setFirstName(request.getFirstName());
-			users.setLastName(request.getLastName());
-			users.setPassword(passwordEncoder.encode(request.getPassword()));
-			User usersResult = usersRepo.save(users);
-			if (usersResult.getId() > 0) {
-				resp.setOurUsers((usersResult));
-				resp.setMessage("User Saved Successfully");
-				resp.setStatusCode(200);
+			if (request.getEmail() == null || request.getEmail().isEmpty()) {
+				throw new IllegalArgumentException("Email cannot be empty");
+			}
+			if (request.getPassword() == null || request.getPassword().isEmpty()) {
+				throw new IllegalArgumentException("Password cannot be empty");
 			}
 
-		} catch (Exception e) {
-			catchError(e);
-			resp.setStatusCode(500);
+			Optional<User> existingUser = usersRepo.findByEmail(request.getEmail());
+			if (existingUser.isPresent()) {
+				throw new IllegalArgumentException("User with this email already exists");
+			}
+
+			User user = new User();
+			user.setEmail(request.getEmail());
+			user.setCity(request.getCity());
+			user.setRole(request.getRole());
+			user.setFirstName(request.getFirstName());
+			user.setLastName(request.getLastName());
+			user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+			User savedUser = usersRepo.save(user);
+			resp.setOurUsers(savedUser);
+			resp.setMessage("User Saved Successfully");
+			resp.setStatusCode(200);
+
+		} catch (IllegalArgumentException e) {
+			resp.setStatusCode(400); // Bad Request
 			resp.setError(e.getMessage());
+		} catch (Exception e) {
+			resp.setStatusCode(500); // Internal Server Error
+			resp.setError("An unexpected error occurred: " + e.getMessage());
 		}
 		return resp;
 	}
@@ -57,13 +72,32 @@ public class UsersManagementService extends DefaultService {
 	public RequestResponse login(RequestDto.LoginRequest loginRequest) {
 		RequestResponse resp = new RequestResponse();
 		try {
+			// Retrieve user by email
+			Optional<User> userOptional = usersRepo.findByEmail(loginRequest.getEmail());
+			if (userOptional.isEmpty()) {
+				resp.setStatusCode(404); // Not Found
+				resp.setMessage("User not found");
+				return resp;
+			}
 
+			User user = userOptional.get();
+
+			// Check if the user is disabled
+			if (user.isDisable()) {
+				resp.setStatusCode(403); // Forbidden
+				resp.setMessage("User is disabled. Please contact support.");
+				return resp;
+			}
+
+			// Authenticate the user
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
-			var user = usersRepo.findByEmail(loginRequest.getEmail()).orElseThrow();
-			var jwt = jwtUtils.generateToken(user);
-			var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+			// Generate tokens
+			String jwt = jwtUtils.generateToken(user);
+			String refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+
+			// Prepare successful response
 			resp.setStatusCode(200);
 			resp.setToken(jwt);
 			resp.setRole(user.getRole());
@@ -74,7 +108,7 @@ public class UsersManagementService extends DefaultService {
 		} catch (Exception e) {
 			catchError(e);
 			resp.setStatusCode(500);
-			resp.setError(e.getMessage());
+			resp.setError("An unexpected error occurred: " + e.getMessage());
 		}
 		return resp;
 	}
@@ -106,7 +140,8 @@ public class UsersManagementService extends DefaultService {
 	public RequestResponse getAllUsers() {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			List<User> result = usersRepo.findAll();
+			List<User> allUsers = usersRepo.findAll();
+			List<User> result = allUsers.stream().filter(user -> !user.isDisable()).toList();
 			if (!result.isEmpty()) {
 				reqRes.setOurUsersList(result);
 				reqRes.setStatusCode(200);
