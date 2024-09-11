@@ -1,12 +1,16 @@
 package com.piyush004.SportsApi.entity;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.time.LocalDateTime;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -33,6 +37,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+    
+    @ManyToMany(mappedBy = "users")
+    private Set<Ground> grounds = new HashSet<>();
 
     @Column(nullable = false)
     private boolean isDisable = false;

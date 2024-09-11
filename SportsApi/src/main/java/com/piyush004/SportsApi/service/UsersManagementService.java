@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.piyush004.SportsApi.dto.RequestDto;
 import com.piyush004.SportsApi.dto.RequestResponse;
-import com.piyush004.SportsApi.entity.Role;
 import com.piyush004.SportsApi.entity.User;
 import com.piyush004.SportsApi.repository.UserRepo;
 

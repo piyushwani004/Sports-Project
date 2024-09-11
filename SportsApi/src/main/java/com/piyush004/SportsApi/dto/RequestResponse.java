@@ -26,4 +26,5 @@ public class RequestResponse {
 	private String password;
 	private User ourUsers;
 	private List<User> ourUsersList;
+	private Object data;
 }

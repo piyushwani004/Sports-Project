@@ -2,52 +2,64 @@ package com.piyush004.SportsApi.entity;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "grounds")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ground extends CommonFields {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer groundId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer groundId;
 
-    private String name;
+	private String name;
 
-    private String description;
+	private String description;
 
-    private Double width;
+	private Double width;
 
-    private Double length;
+	private Double length;
 
-    private Double height;
+	private Double height;
 
-    private Double price; 
+	private String location;
 
-    @Column(name = "location_url")
-    private String locationUrl;
+	@Column(name = "location_url")
+	private String locationUrl;
+	
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH })
+	@JoinTable(name = "GROUND_USER_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "id"))
+	private Set<User> users = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
-    @JoinTable(name = "GROUND_SPORT_MAPPING", 
-        joinColumns = @JoinColumn(name = "groundId"), 
-        inverseJoinColumns = @JoinColumn(name = "sportId"))
-    private Set<Sport> availableSports = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH })
+	@JoinTable(name = "GROUND_SPORT_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "sport_id"))
+	private Set<Sport> availableSports = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
-    @JoinTable(name = "GROUND_AMENITY_MAPPING", 
-        joinColumns = @JoinColumn(name = "groundId"), 
-        inverseJoinColumns = @JoinColumn(name = "amenityId"))
-    private Set<Amenity> amenities = new HashSet<>(); 
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH })
+	@JoinTable(name = "GROUND_AMENITY_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
+	private Set<Amenity> amenities = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
-    @JoinTable(name = "GROUND_AVAILABLETIME_MAPPING", 
-        joinColumns = @JoinColumn(name = "groundId"), 
-        inverseJoinColumns = @JoinColumn(name = "availableTimeId"))
-    private Set<AvailableTime> availableTimes = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH })
+	@JoinTable(name = "GROUND_AVAILABLETIME_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "available_time_id"))
+	private Set<AvailableTime> availableTimes = new HashSet<>();
 
-    @OneToMany(mappedBy = "ground", cascade = CascadeType.ALL)
-    private List<GroundImage> images = new ArrayList<>(); 
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH })
+	@JoinTable(name = "GROUND_GROUNDIMAGE_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "ground_image_id"))
+	private Set<GroundImage> images = new HashSet<>();
 
+	
 }

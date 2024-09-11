@@ -1,5 +1,7 @@
 package com.piyush004.SportsApi.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,6 +16,7 @@ public class Rating extends CommonFields {
 
     @ManyToOne
     @JoinColumn(name = "groundId")
+    @JsonBackReference
     private Ground ground;
 
     private Long userId;

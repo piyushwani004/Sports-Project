@@ -1,12 +1,20 @@
 package com.piyush004.SportsApi.entity;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "sports")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Sport extends CommonFields {
 
 	@Id
@@ -19,8 +27,11 @@ public class Sport extends CommonFields {
 	@Column(columnDefinition = "TEXT")
 	private String description;
 
+	@Column(nullable = false, precision = 10, scale = 2)
+	private BigDecimal price;
+
 	@ManyToMany(mappedBy = "availableSports")
-    private List<Ground> grounds;
+	private Set<Ground> grounds = new HashSet<>();
 
 //	@OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private Set<Enrollment> enrollments = new HashSet<>();
