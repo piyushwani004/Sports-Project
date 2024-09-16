@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class Sport extends CommonFields {
 	private BigDecimal price;
 
 	@ManyToMany(mappedBy = "availableSports")
+	@JsonIgnore
 	private Set<Ground> grounds = new HashSet<>();
 
 //	@OneToMany(mappedBy = "sport", cascade = CascadeType.ALL, orphanRemoval = true)

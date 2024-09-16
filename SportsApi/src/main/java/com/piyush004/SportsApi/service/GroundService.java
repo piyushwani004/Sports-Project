@@ -20,7 +20,7 @@ import com.piyush004.SportsApi.repository.SportRepo;
 import com.piyush004.SportsApi.repository.UserRepo;
 
 @Service
-public class GroundService {
+public class GroundService extends DefaultService {
 
 	@Autowired
 	private GroundRepo groundRepo;
@@ -90,9 +90,32 @@ public class GroundService {
 			resp.setStatusCode(400); // Bad Request
 			resp.setError(e.getMessage());
 		} catch (Exception e) {
+			catchError(e);
 			resp.setStatusCode(500); // Internal Server Error
 			resp.setError("An unexpected error occurred: " + e.getMessage());
 		}
 		return resp;
 	}
+	
+	
+	public RequestResponse getGroundById(Integer id) {
+		RequestResponse reqRes = new RequestResponse();
+		try {
+			Ground  groundById = groundRepo.findByIdWithDetails(id).orElseThrow(() -> new RuntimeException("Ground Not found"));
+			groundById.getUsers().size();
+			groundById.getAvailableTimes().size();
+			groundById.getImages().size();
+			groundById.getAvailableSports().size(); 
+			groundById.getAmenities().size();
+			reqRes.setData(groundById);
+			reqRes.setStatusCode(200);
+			reqRes.setMessage("Ground with name '" + groundById.getName() + "' found successfully");
+		} catch (Exception e) {
+			catchError(e);
+			reqRes.setStatusCode(500);
+			reqRes.setMessage("Error occurred: " + e.getMessage());
+		}
+		return reqRes;
+	}
+	
 }

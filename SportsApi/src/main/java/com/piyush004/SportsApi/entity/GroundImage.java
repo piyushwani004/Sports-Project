@@ -26,6 +26,7 @@ public class GroundImage extends CommonFields {
 	private Long groundImageId;
 
 	@ManyToMany(mappedBy = "images")
+	@JsonIgnore
 	private Set<Ground> grounds = new HashSet<>();
 
 	private Boolean isUrl = false;

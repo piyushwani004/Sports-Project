@@ -3,6 +3,7 @@ package com.piyush004.SportsApi.entity;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,5 +24,6 @@ public class Amenity extends CommonFields {
     private String description;
 
     @ManyToMany(mappedBy = "amenities")
+    @JsonIgnore
     private Set<Ground> grounds = new HashSet<>();
 }

@@ -9,5 +9,5 @@ import com.piyush004.SportsApi.entity.User;
 
 public interface SportRepo extends JpaRepository<Sport, Integer> {
 	
-	Optional<Sport> findByName(String name);
+	Optional<Sport> findBysportName(String sportName);
 }

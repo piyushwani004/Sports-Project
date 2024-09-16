@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -39,6 +40,7 @@ public class User implements UserDetails {
     private Role role;
     
     @ManyToMany(mappedBy = "users")
+    @JsonIgnore
     private Set<Ground> grounds = new HashSet<>();
 
     @Column(nullable = false)
