@@ -15,7 +15,7 @@ public interface GroundRepo extends JpaRepository<Ground, Integer> {
 	
 	Optional<Ground> findByName(String name);
 	
-	@Query("SELECT g FROM Ground g JOIN FETCH g.availableSports JOIN FETCH g.amenities WHERE g.groundId = :id")
+	@Query("SELECT g FROM Ground g JOIN FETCH g.sports JOIN FETCH g.amenities WHERE g.groundId = :id")
 	Optional<Ground> findByIdWithDetails(@Param("id") Integer id);
 
 }

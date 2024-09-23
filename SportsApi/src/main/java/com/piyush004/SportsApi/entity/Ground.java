@@ -36,34 +36,35 @@ public class Ground extends CommonFields {
 	@Column(name = "location_url")
 	private String locationUrl;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-			CascadeType.REFRESH })
-	@JoinTable(name = "GROUND_USER_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "id"))
-	@JsonManagedReference
-	private Set<User> users = new HashSet<>();
+	@ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-			CascadeType.REFRESH })
-	@JoinTable(name = "GROUND_SPORT_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "sport_id"))
-	@JsonManagedReference
-	private Set<Sport> availableSports = new HashSet<>();
+	@ManyToMany
+    @JoinTable(
+        name = "ground_sport",
+        joinColumns = @JoinColumn(name = "ground_id"),
+        inverseJoinColumns = @JoinColumn(name = "sport_id")
+    )
+	private Set<Sport> sports = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-			CascadeType.REFRESH })
-	@JoinTable(name = "GROUND_AMENITY_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-	@JsonManagedReference
+	@ManyToMany
+    @JoinTable(
+        name = "ground_amenity",
+        joinColumns = @JoinColumn(name = "ground_id"),
+        inverseJoinColumns = @JoinColumn(name = "amenity_id")
+    )
 	private Set<Amenity> amenities = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-			CascadeType.REFRESH })
-	@JoinTable(name = "GROUND_AVAILABLETIME_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "available_time_id"))
-	@JsonManagedReference
+	@ManyToMany
+    @JoinTable(
+        name = "ground_available_time",
+        joinColumns = @JoinColumn(name = "ground_id"),
+        inverseJoinColumns = @JoinColumn(name = "available_time_id")
+    )
 	private Set<AvailableTime> availableTimes = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-			CascadeType.REFRESH })
-	@JoinTable(name = "GROUND_GROUNDIMAGE_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "ground_image_id"))
-	@JsonManagedReference
+	@OneToMany(mappedBy = "ground", cascade = CascadeType.ALL)
 	private Set<GroundImage> images = new HashSet<>();
 
 }

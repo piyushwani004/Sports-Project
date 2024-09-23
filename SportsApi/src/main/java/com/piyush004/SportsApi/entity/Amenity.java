@@ -24,6 +24,5 @@ public class Amenity extends CommonFields {
     private String description;
 
     @ManyToMany(mappedBy = "amenities")
-    @JsonIgnore
     private Set<Ground> grounds = new HashSet<>();
 }

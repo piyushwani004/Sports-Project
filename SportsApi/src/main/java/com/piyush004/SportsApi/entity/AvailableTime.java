@@ -31,6 +31,5 @@ public class AvailableTime extends CommonFields {
 	private String endTiming;
 
 	@ManyToMany(mappedBy = "availableTimes")
-	@JsonIgnore
 	private Set<Ground> grounds = new HashSet<>();
 }

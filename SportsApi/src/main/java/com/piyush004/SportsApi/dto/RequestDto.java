@@ -45,17 +45,20 @@ public class RequestDto {
 		private String location;
 		private String locationUrl;
 
-		@JsonProperty("availableSports")
-		private Set<Sport> availableSports;
+		@NotEmpty(message = "Sports cannot be empty.")
+	    @JsonProperty("availableSports")
+	    private Set<Integer> availableSports;  // Changed to Set of Sport IDs
 
-		@JsonProperty("amenities")
-		private Set<Amenity> amenities;
+	    @NotEmpty(message = "Amenities cannot be empty.")
+	    @JsonProperty("amenities")
+	    private Set<Integer> amenities;  // Changed to Set of Amenity IDs
 
-		@JsonProperty("availableTimes")
-		private Set<AvailableTime> availableTimes;
+	    @NotEmpty(message = "Available times cannot be empty.")
+	    @JsonProperty("availableTimes")
+	    private Set<AvailableTime> availableTimes;  
 
-		@JsonProperty("images")
-		private Set<GroundImage> images;
+	    @JsonProperty("images")
+	    private Set<GroundImage> images;  // Using a custom DTO for images
 	}
 
 }

@@ -25,9 +25,9 @@ public class GroundImage extends CommonFields {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long groundImageId;
 
-	@ManyToMany(mappedBy = "images")
-	@JsonIgnore
-	private Set<Ground> grounds = new HashSet<>();
+	@ManyToOne
+    @JoinColumn(name = "ground_id")
+	private Ground ground;
 
 	private Boolean isUrl = false;
 

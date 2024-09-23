@@ -39,8 +39,7 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Ground> grounds = new HashSet<>();
 
     @Column(nullable = false)
