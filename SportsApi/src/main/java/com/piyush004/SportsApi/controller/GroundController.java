@@ -20,7 +20,7 @@ public class GroundController {
 	@Autowired
 	private GroundService groundService;
 
-	@PostMapping(value = "/admin/ground/ground-register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@PostMapping(value = "/admin/ground/ground-register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RequestResponse> registerGround(@Valid @RequestBody GroundRegisterRequest request) {
 		RequestResponse response = groundService.registerGround(request);
 		return ResponseEntity.status(response.getStatusCode()).body(response);

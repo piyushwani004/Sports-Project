@@ -3,20 +3,16 @@ package com.piyush004.SportsApi.service;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.piyush004.SportsApi.dto.RequestDto.GroundRegisterRequest;
 import com.piyush004.SportsApi.dto.RequestResponse;
 import com.piyush004.SportsApi.entity.*;
-import com.piyush004.SportsApi.repository.AmenityRepo;
 import com.piyush004.SportsApi.repository.GroundRepo;
-import com.piyush004.SportsApi.repository.SportRepo;
 import com.piyush004.SportsApi.repository.UserRepo;
 
 @Service
@@ -25,11 +21,11 @@ public class GroundService extends DefaultService {
 	@Autowired
 	private GroundRepo groundRepo;
 
-	@Autowired
-	private SportRepo sportRepo;
-
-	@Autowired
-	private AmenityRepo amenityRepo;
+//	@Autowired
+//	private SportRepo sportRepo;
+//
+//	@Autowired
+//	private AmenityRepo amenityRepo;
 
 	@Autowired
 	private UserRepo userRepo;
@@ -71,21 +67,19 @@ public class GroundService extends DefaultService {
 			ground.setLocation(request.getLocation());
 			ground.setLocationUrl(request.getLocationUrl());
 			ground.setUsers(tempusers);
-			ground.setAvailableSports(request.getAvailableSports());
-			ground.setAmenities(request.getAmenities());
-			ground.setAvailableTimes(request.getAvailableTimes());
-			ground.setImages(request.getImages());
+//			ground.setAvailableSports(request.getAvailableSports());
+//			ground.setAmenities(request.getAmenities());
+//			ground.setAvailableTimes(request.getAvailableTimes());
+//			ground.setImages(request.getImages());
 
 			// Save the ground to the database
-	        Ground savedGround = groundRepo.save(ground);
+			Ground savedGround = groundRepo.save(ground);
 
-	        // Prepare a successful response
-	        resp.setData(savedGround);
-	        resp.setMessage("Ground registered successfully");
-	        resp.setStatusCode(200);
+			// Prepare a successful response
+			resp.setData(savedGround);
+			resp.setMessage("Ground registered successfully");
+			resp.setStatusCode(200);
 
-
-			
 		} catch (IllegalArgumentException e) {
 			resp.setStatusCode(400); // Bad Request
 			resp.setError(e.getMessage());
@@ -96,17 +90,19 @@ public class GroundService extends DefaultService {
 		}
 		return resp;
 	}
-	
-	
+
 	public RequestResponse getGroundById(Integer id) {
 		RequestResponse reqRes = new RequestResponse();
 		try {
-			Ground  groundById = groundRepo.findByIdWithDetails(id).orElseThrow(() -> new RuntimeException("Ground Not found"));
-			groundById.getUsers().size();
-			groundById.getAvailableTimes().size();
-			groundById.getImages().size();
-			groundById.getAvailableSports().size(); 
-			groundById.getAmenities().size();
+			Ground groundById = groundRepo.findById(id).orElseThrow(() -> new RuntimeException("Ground Not found"));
+
+			System.out.println("\n Ground: " + groundById);
+			System.out.println("\n User names: " + groundById.getUsers());
+//			System.out.println("\n Times: " + groundById.getAvailableTimes());
+//			System.out.println("\n Images: " + groundById.getImages());
+//			System.out.println("\n Sports: " + groundById.getAvailableSports());
+//			System.out.println("\n Amenities: " + groundById.getAmenities());
+
 			reqRes.setData(groundById);
 			reqRes.setStatusCode(200);
 			reqRes.setMessage("Ground with name '" + groundById.getName() + "' found successfully");
@@ -117,5 +113,5 @@ public class GroundService extends DefaultService {
 		}
 		return reqRes;
 	}
-	
+
 }

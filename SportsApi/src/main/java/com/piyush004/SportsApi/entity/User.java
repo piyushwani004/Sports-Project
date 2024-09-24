@@ -12,15 +12,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "Users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -39,8 +44,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     
-    @ManyToMany(mappedBy = "users")
-    @JsonIgnore
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY )
+//    @JsonIgnore
+    @JsonIgnoreProperties({"users"})
     private Set<Ground> grounds = new HashSet<>();
 
     @Column(nullable = false)

@@ -3,6 +3,7 @@ package com.piyush004.SportsApi.controller;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class LoginController {
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
-    @PostMapping("/auth/register")
+    @PostMapping(value = "/auth/register", consumes = MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity<RequestResponse> register(@RequestBody RequestResponse request) {
         return ResponseEntity.ok(usersManagementService.register(request));
     }
