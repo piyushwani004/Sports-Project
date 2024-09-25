@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.piyush004.SportsApi.dto.ResponseDto;
+import com.piyush004.SportsApi.dto.ResponseDto.ResOutRes;
 import com.piyush004.SportsApi.entity.Role;
 import com.piyush004.SportsApi.entity.User;
 import org.springframework.stereotype.Service;
@@ -16,8 +16,8 @@ public class PlayerService extends DefaultService {
 	@Autowired
 	private PlayerRepo playerRepo;
 
-	public ResponseDto getAllPlayers() {
-		ResponseDto reqRes = new ResponseDto();
+	public ResOutRes getAllPlayers() {
+		ResOutRes reqRes = new ResOutRes();
 		try {
 			List<User> result = playerRepo.getAllPlayers(Role.USER).orElseThrow();
 			if (!result.isEmpty()) {

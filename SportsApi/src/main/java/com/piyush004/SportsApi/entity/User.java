@@ -45,7 +45,6 @@ public class User implements UserDetails {
     private Role role;
     
     @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY )
-//    @JsonIgnore
     @JsonIgnoreProperties({"users"})
     private Set<Ground> grounds = new HashSet<>();
 

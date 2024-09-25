@@ -3,8 +3,16 @@ package com.piyush004.SportsApi.dto;
 import jakarta.validation.constraints.*;
 import jakarta.validation.constraints.Pattern.Flag;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.piyush004.SportsApi.entity.Amenity;
+import com.piyush004.SportsApi.entity.AvailableTime;
+import com.piyush004.SportsApi.entity.GroundImage;
+import com.piyush004.SportsApi.entity.Sport;
+import com.piyush004.SportsApi.entity.User;
+
 import lombok.*;
 
 @Data
@@ -21,7 +29,8 @@ public class RequestDto {
 		private String password;
 	}
 
-	@Data
+	@Getter
+	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class GroundRegisterRequest {
@@ -33,21 +42,20 @@ public class RequestDto {
 		private Double width;
 		private Double length;
 		private Double height;
-//		private Double price;
 		private String location;
 		private String locationUrl;
 
-//		@JsonProperty("availableSports")
-//		private Set<Sport> availableSports;
-//
-//		@JsonProperty("amenities")
-//		private Set<Amenity> amenities;
-//
-//		@JsonProperty("availableTimes")
-//		private Set<AvailableTime> availableTimes;
-//
-//		@JsonProperty("images")
-//		private Set<GroundImage> images;
+		@JsonProperty("availableSports")
+		private Set<Sport> availableSports;
+
+		@JsonProperty("amenities")
+		private Set<Amenity> amenities;
+
+		@JsonProperty("availableTimes")
+		private Set<AvailableTime> availableTimes;
+
+		@JsonProperty("images")
+		private Set<GroundImage> images;
 	}
 
 }

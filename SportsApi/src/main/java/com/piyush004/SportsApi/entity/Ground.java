@@ -2,10 +2,7 @@ package com.piyush004.SportsApi.entity;
 
 import java.util.*;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,34 +37,28 @@ public class Ground extends CommonFields {
 	private String locationUrl;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "GROUND_USER_MAPPING", joinColumns = @JoinColumn(name = "ground_id", referencedColumnName = "groundId"), 
-				inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
-//	@JsonManagedReference
-	@JsonIgnoreProperties({"grounds"})
+	@JoinTable(name = "GROUND_USER_MAPPING", joinColumns = @JoinColumn(name = "ground_id", referencedColumnName = "groundId"), inverseJoinColumns = @JoinColumn(name = "id", referencedColumnName = "id"))
+	@JsonIgnoreProperties({ "grounds" })
 	private Set<User> users = new HashSet<>();
 
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-//			CascadeType.REFRESH })
-//	@JoinTable(name = "GROUND_SPORT_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "sport_id"))
-//	@JsonManagedReference
-//	private Set<Sport> availableSports = new HashSet<>();
-//
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-//			CascadeType.REFRESH })
-//	@JoinTable(name = "GROUND_AMENITY_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "amenity_id"))
-//	@JsonManagedReference
-//	private Set<Amenity> amenities = new HashSet<>();
-//
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-//			CascadeType.REFRESH })
-//	@JoinTable(name = "GROUND_AVAILABLETIME_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "available_time_id"))
-//	@JsonManagedReference
-//	private Set<AvailableTime> availableTimes = new HashSet<>();
-//
-//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-//			CascadeType.REFRESH })
-//	@JoinTable(name = "GROUND_GROUNDIMAGE_MAPPING", joinColumns = @JoinColumn(name = "ground_id"), inverseJoinColumns = @JoinColumn(name = "ground_image_id"))
-//	@JsonManagedReference
-//	private Set<GroundImage> images = new HashSet<>();
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "GROUND_SPORT_MAPPING", joinColumns = @JoinColumn(name = "ground_id", referencedColumnName = "groundId"), inverseJoinColumns = @JoinColumn(name = "sport_id", referencedColumnName = "sportId"))
+	@JsonIgnoreProperties({ "grounds" })
+	private Set<Sport> availableSports = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "GROUND_AMENITY_MAPPING", joinColumns = @JoinColumn(name = "ground_id", referencedColumnName = "groundId"), inverseJoinColumns = @JoinColumn(name = "amenity_id", referencedColumnName = "amenityId"))
+	@JsonIgnoreProperties({ "grounds" })
+	private Set<Amenity> amenities = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "GROUND_AVAILABLETIME_MAPPING", joinColumns = @JoinColumn(name = "ground_id", referencedColumnName = "groundId"), inverseJoinColumns = @JoinColumn(name = "available_time_id", referencedColumnName = "availableTimeId"))
+	@JsonIgnoreProperties({ "grounds" })
+	private Set<AvailableTime> availableTimes = new HashSet<>();
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "GROUND_GROUNDIMAGE_MAPPING", joinColumns = @JoinColumn(name = "ground_id", referencedColumnName = "groundId"), inverseJoinColumns = @JoinColumn(name = "ground_image_id", referencedColumnName = "groundImageId"))
+	@JsonIgnoreProperties({ "grounds" })
+	private Set<GroundImage> images = new HashSet<>();
 
 }

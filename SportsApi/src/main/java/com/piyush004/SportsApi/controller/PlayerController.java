@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.piyush004.SportsApi.dto.ResponseDto;
+import com.piyush004.SportsApi.dto.ResponseDto.ResOutRes;
 import com.piyush004.SportsApi.service.PlayerService;
 
 @RestController
@@ -15,7 +15,7 @@ public class PlayerController {
 	private PlayerService playerService;
 
 	@GetMapping("/admin/get-all-players")
-	public ResponseEntity<ResponseDto> getAllPlayers() {
+	public ResponseEntity<ResOutRes> getAllPlayers() {
 		return ResponseEntity.ok(playerService.getAllPlayers());
 	}
 }
