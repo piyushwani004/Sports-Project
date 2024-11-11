@@ -18,6 +18,14 @@ public class ControllerExceptionHandler {
 		message.setDescription(request.getDescription(false));
 		message.setMessage(ex.getMessage());
 		message.setTimestamp(new Date());
+
+		// Capture additional exception details
+		StackTraceElement element = ex.getStackTrace()[0]; // Getting the first stack trace element for the error
+		message.setClassName(element.getClassName());
+		message.setMethodName(element.getMethodName());
+		message.setFileName(element.getFileName());
+		message.setLineNumber(element.getLineNumber());
+
 		return message;
 	}
 
@@ -29,6 +37,13 @@ public class ControllerExceptionHandler {
 		message.setDescription(request.getDescription(false));
 		message.setMessage(ex.getMessage());
 		message.setTimestamp(new Date());
+
+		// Capture additional exception details
+		StackTraceElement element = ex.getStackTrace()[0]; // Getting the first stack trace element for the error
+		message.setClassName(element.getClassName());
+		message.setMethodName(element.getMethodName());
+		message.setFileName(element.getFileName());
+		message.setLineNumber(element.getLineNumber());
 
 		return message;
 	}

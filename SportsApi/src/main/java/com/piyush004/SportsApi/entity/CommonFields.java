@@ -2,8 +2,10 @@ package com.piyush004.SportsApi.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import lombok.Data;
 
 @MappedSuperclass
+@Data
 public class CommonFields {
 
     @Column(nullable = false)
